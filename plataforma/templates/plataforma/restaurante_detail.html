@@ -1,0 +1,101 @@
+{% extends "plataforma/base.html" %}
+
+{% block title %}{{ restaurante.nombre }} - ResenasYa{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- HEADER -->
+    <div class="mb-4">
+        <a href="{% url 'restaurantes_list' %}" style="color:#e8622a; text-decoration:none; font-size:0.9rem;">
+            <i class="bi bi-arrow-left me-1"></i>Volver a Restaurantes
+        </a>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- INFO RESTAURANTE -->
+        <div class="col-lg-8">
+            <div class="card p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                    <div>
+                        <span class="badge-cocina mb-2 d-inline-block">{{ restaurante.tipo_cocina }}</span>
+                        <h2 class="card-title mb-1" style="font-size:2rem;">{{ restaurante.nombre }}</h2>
+                        <p class="mb-1" style="color:#aaa;">
+                            <i class="bi bi-geo-alt-fill me-1" style="color:#e8622a;"></i>
+                            {{ restaurante.ciudad }} &mdash; {{ restaurante.direccion }}
+                        </p>
+                        <p style="color:#666;">
+                            <i class="bi bi-telephone me-1"></i>{{ restaurante.telefono }}
+                        </p>
+                    </div>
+                    <a href="{% url 'resena_crear' %}" class="btn btn-acento">
+                        <i class="bi bi-plus-circle me-1"></i>Agregar Resena
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROMEDIO -->
+        <div class="col-lg-4">
+            <div class="card p-4 text-center h-100 d-flex flex-column justify-content-center">
+                <div style="font-size:4rem; font-weight:900; color:#e8622a; line-height:1;">{{ promedio }}</div>
+                <div class="estrellas mt-1" style="font-size:1.5rem;">
+                    {% if promedio >= 1 %}&#9733;{% else %}&#9734;{% endif %}
+                    {% if promedio >= 2 %}&#9733;{% else %}&#9734;{% endif %}
+                    {% if promedio >= 3 %}&#9733;{% else %}&#9734;{% endif %}
+                    {% if promedio >= 4 %}&#9733;{% else %}&#9734;{% endif %}
+                    {% if promedio >= 5 %}&#9733;{% else %}&#9734;{% endif %}
+                </div>
+                <p style="color:#666; margin-top:0.5rem; font-size:0.9rem;">
+                    Basado en {{ resenas.count }} resena(s)
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESENAS -->
+    <div class="section-header">
+        <h3 class="page-title mb-0">Resenas ({{ resenas.count }})</h3>
+    </div>
+
+    {% if resenas %}
+    <div class="row g-3">
+        {% for resena in resenas %}
+        <div class="col-12">
+            <div class="card p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                    <div class="estrellas" style="font-size:1.2rem;">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= resena.calificacion %}&#9733;{% else %}&#9734;{% endif %}
+                        {% endfor %}
+                        <span style="color:#555; font-size:0.85rem; margin-left:8px;">{{ resena.calificacion }}/5</span>
+                    </div>
+                    <small style="color:#555;">
+                        <i class="bi bi-calendar3 me-1"></i>{{ resena.fecha|date:"d/m/Y H:i" }}
+                    </small>
+                </div>
+                <p style="color:#ccc; line-height:1.7; margin:0;">{{ resena.comentario }}</p>
+
+                {% if resena.usuarios.exists %}
+                <div class="mt-3 pt-3" style="border-top:1px solid #222;">
+                    {% for usuario in resena.usuarios.all %}
+                    <small style="color:#555;">
+                        <i class="bi bi-person me-1"></i>{{ usuario.nombre }}
+                    </small>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert-dark-custom p-4 text-center">
+        <i class="bi bi-chat-left" style="font-size:2rem; color:#333; display:block; margin-bottom:0.5rem;"></i>
+        Aun no hay resenas para este restaurante.
+        <a href="{% url 'resena_crear' %}" class="d-block mt-2" style="color:#e8622a;">
+            Se el primero en escribir una
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

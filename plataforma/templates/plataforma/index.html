@@ -1,0 +1,141 @@
+{% extends "plataforma/base.html" %}
+
+{% block title %}ResenasYa - Inicio{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section style="background: linear-gradient(160deg, #080808 0%, #1a0a02 50%, #080808 100%); padding: 5rem 0 4rem; border-bottom: 1px solid #1f1f1f;">
+    <div class="container text-center">
+        <div class="mb-3">
+            <i class="bi bi-star-fill" style="font-size:3.5rem; color:#e8622a;"></i>
+        </div>
+        <h1 style="font-size:3rem; font-weight:900; color:#fff; letter-spacing:-1px;">
+            Descubre los mejores <span style="color:#e8622a;">restaurantes</span>
+        </h1>
+        <p style="color:#aaa; font-size:1.2rem; max-width:550px; margin:1rem auto 2rem;">
+            Lee resenas reales, comparte tu experiencia y encuentra tu proximo lugar favorito.
+        </p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
+            <a href="{% url 'buscar' %}" class="btn btn-acento btn-lg px-4">
+                <i class="bi bi-search me-2"></i>Buscar Restaurantes
+            </a>
+            <a href="{% url 'restaurante_crear' %}" class="btn btn-outline-acento btn-lg px-4">
+                <i class="bi bi-plus-circle me-2"></i>Agregar Restaurante
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- STATS -->
+<section class="py-5" style="background-color:#0e0e0e;">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            <div class="col-sm-4 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-num">{{ total_restaurantes }}</div>
+                    <div class="stat-label"><i class="bi bi-shop me-1"></i>Restaurantes</div>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-num">{{ total_resenas }}</div>
+                    <div class="stat-label"><i class="bi bi-chat-left-text me-1"></i>Resenas</div>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-num">{{ total_usuarios }}</div>
+                    <div class="stat-label"><i class="bi bi-people me-1"></i>Usuarios</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- RESTAURANTES RECIENTES -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center section-header">
+            <h2 class="page-title mb-0">Restaurantes Registrados</h2>
+            <a href="{% url 'restaurantes_list' %}" class="btn btn-outline-acento btn-sm">
+                Ver todos <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        {% if ultimos_restaurantes %}
+        <div class="row g-4">
+            {% for r in ultimos_restaurantes %}
+            <div class="col-sm-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge-cocina">{{ r.tipo_cocina }}</span>
+                            <span class="estrellas" style="font-size:0.9rem;">
+                                {% with promedio=r.promedio_calificacion %}
+                                    {% if promedio >= 1 %}&#9733;{% else %}&#9734;{% endif %}
+                                    {% if promedio >= 2 %}&#9733;{% else %}&#9734;{% endif %}
+                                    {% if promedio >= 3 %}&#9733;{% else %}&#9734;{% endif %}
+                                    {% if promedio >= 4 %}&#9733;{% else %}&#9734;{% endif %}
+                                    {% if promedio >= 5 %}&#9733;{% else %}&#9734;{% endif %}
+                                {% endwith %}
+                            </span>
+                        </div>
+                        <h5 class="card-title mt-2">{{ r.nombre }}</h5>
+                        <p class="card-text mb-1">
+                            <i class="bi bi-geo-alt me-1" style="color:#e8622a;"></i>{{ r.ciudad }}
+                        </p>
+                        <p class="card-text" style="font-size:0.85rem; color:#666;">{{ r.direccion }}</p>
+                    </div>
+                    <div class="card-footer" style="background:transparent; border-top:1px solid #222; padding:1rem 1.5rem;">
+                        <a href="{% url 'restaurante_detail' r.pk %}" class="btn btn-acento btn-sm w-100">
+                            Ver Resenas <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert-dark-custom p-4 text-center">
+            <i class="bi bi-shop" style="font-size:2rem; color:#444; display:block; margin-bottom:0.5rem;"></i>
+            Aun no hay restaurantes registrados.
+            <a href="{% url 'restaurante_crear' %}" class="d-block mt-2" style="color:#e8622a;">
+                Agrega el primero
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA RESENAS -->
+<section class="py-5" style="background-color:#0e0e0e; border-top:1px solid #1a1a1a;">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card p-4 text-center">
+                    <i class="bi bi-shop" style="font-size:2.5rem; color:#e8622a; margin-bottom:1rem;"></i>
+                    <h5 class="card-title">Registrar Restaurante</h5>
+                    <p class="card-text">Agrega un restaurante con todos sus datos.</p>
+                    <a href="{% url 'restaurante_crear' %}" class="btn btn-acento mt-2">Agregar</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-4 text-center">
+                    <i class="bi bi-chat-left-text" style="font-size:2.5rem; color:#e8622a; margin-bottom:1rem;"></i>
+                    <h5 class="card-title">Escribir una Resena</h5>
+                    <p class="card-text">Comparte tu experiencia y califica el restaurante.</p>
+                    <a href="{% url 'resena_crear' %}" class="btn btn-acento mt-2">Escribir</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-4 text-center">
+                    <i class="bi bi-person-plus" style="font-size:2.5rem; color:#e8622a; margin-bottom:1rem;"></i>
+                    <h5 class="card-title">Registrar Usuario</h5>
+                    <p class="card-text">Crea tu perfil y asocia una resena.</p>
+                    <a href="{% url 'usuario_crear' %}" class="btn btn-acento mt-2">Registrarme</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

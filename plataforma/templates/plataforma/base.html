@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ResenasYa{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --negro: #080808;
+            --negro2: #111;
+            --negro3: #1a1a1a;
+            --negro4: #222;
+            --acento: #e8622a;
+            --acento2: #ffd700;
+            --texto: #ddd;
+            --texto2: #aaa;
+        }
+
+        body {
+            background-color: var(--negro);
+            color: var(--texto);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: var(--negro2) !important;
+            border-bottom: 3px solid var(--acento);
+            box-shadow: 0 2px 20px rgba(232, 98, 42, 0.2);
+        }
+        .navbar-brand {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--acento) !important;
+            letter-spacing: -0.5px;
+        }
+        .navbar-brand span { color: var(--acento2); }
+        .nav-link { color: var(--texto2) !important; font-weight: 500; transition: color 0.2s; }
+        .nav-link:hover, .nav-link.active { color: var(--acento) !important; }
+        .dropdown-menu {
+            background-color: var(--negro3);
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+        .dropdown-item { color: var(--texto2); transition: all 0.2s; }
+        .dropdown-item:hover { background-color: var(--negro4); color: var(--acento); }
+
+        /* CARDS */
+        .card {
+            background-color: var(--negro3);
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--acento); box-shadow: 0 10px 30px rgba(232,98,42,0.15); }
+        .card-title { color: #fff; font-weight: 700; }
+        .card-text { color: var(--texto2); }
+
+        /* FORMS */
+        .form-control, .form-select {
+            background-color: var(--negro4);
+            border: 1px solid #333;
+            color: var(--texto);
+            border-radius: 8px;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #2a2a2a;
+            border-color: var(--acento);
+            color: var(--texto);
+            box-shadow: 0 0 0 3px rgba(232,98,42,0.2);
+        }
+        .form-control::placeholder { color: #555; }
+        .form-label { color: var(--texto2); font-weight: 500; font-size: 0.9rem; }
+        .form-select option { background-color: var(--negro3); }
+
+        /* BUTTONS */
+        .btn-acento {
+            background-color: var(--acento);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-acento:hover { background-color: #c9521f; color: #fff; transform: translateY(-1px); }
+        .btn-outline-acento {
+            border: 1px solid var(--acento);
+            color: var(--acento);
+            background: transparent;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-outline-acento:hover { background-color: var(--acento); color: #fff; }
+
+        /* MISC */
+        .badge-cocina {
+            background-color: rgba(232,98,42,0.15);
+            color: var(--acento);
+            border: 1px solid rgba(232,98,42,0.3);
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .estrellas { color: var(--acento2); font-size: 1rem; letter-spacing: 2px; }
+        .page-title {
+            border-left: 4px solid var(--acento);
+            padding-left: 1rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, var(--negro3), var(--negro4));
+            border: 1px solid #2a2a2a;
+            border-left: 4px solid var(--acento);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .stat-num { font-size: 2.5rem; font-weight: 800; color: var(--acento); line-height: 1; }
+        .stat-label { color: var(--texto2); font-size: 0.85rem; margin-top: 4px; }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--negro2);
+            border-top: 2px solid var(--acento);
+            padding: 1.5rem 0;
+            margin-top: auto;
+        }
+
+        /* ALERT */
+        .alert-dark-custom {
+            background-color: var(--negro3);
+            border: 1px solid #2a2a2a;
+            color: var(--texto2);
+            border-radius: 12px;
+        }
+
+        /* SECTION */
+        .section-header {
+            border-bottom: 1px solid #1f1f1f;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <i class="bi bi-star-fill me-1"></i>Resenas<span>Ya</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="{% url 'index' %}">
+                            <i class="bi bi-house-door me-1"></i>Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="{% url 'restaurantes_list' %}">
+                            <i class="bi bi-shop me-1"></i>Restaurantes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="{% url 'buscar' %}">
+                            <i class="bi bi-search me-1"></i>Buscar
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle px-3" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-plus-circle me-1"></i>Agregar
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item py-2" href="{% url 'restaurante_crear' %}">
+                                    <i class="bi bi-shop me-2 text-warning"></i>Restaurante
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2" href="{% url 'resena_crear' %}">
+                                    <i class="bi bi-chat-left-text me-2 text-warning"></i>Resena
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2" href="{% url 'usuario_crear' %}">
+                                    <i class="bi bi-person-plus me-2 text-warning"></i>Usuario
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container text-center">
+            <p class="mb-0" style="color:#555; font-size:0.85rem;">
+                <i class="bi bi-star-fill me-1" style="color:#e8622a;"></i>
+                ResenasYa &copy; 2024 &mdash; Plataforma de Resenas de Restaurantes
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
