@@ -7,6 +7,9 @@ class Restaurante(models.Model):
     tipo_cocina = models.CharField(max_length=100)
     telefono = models.CharField(max_length=20)
     ciudad = models.CharField(max_length=100)
+    imagen = models.ImageField(upload_to='restaurantes/', blank=True, null=True)
+    fecha_apertura = models.DateField(null=True, blank=True)
+    codigo_registro = models.IntegerField(unique=True, default=0)
 
     def __str__(self):
         return self.nombre

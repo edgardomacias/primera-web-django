@@ -1,0 +1,57 @@
+{% extends "plataforma/base.html" %}
+
+{% block title %}Iniciar Sesión - ResenasYa{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-circle" style="font-size:3rem; color:#e8622a;"></i>
+                    <h3 class="card-title mt-2">Iniciar Sesión</h3>
+                    <p style="color:#666; font-size:0.9rem;">Accede a tu cuenta para gestionar restaurantes</p>
+                </div>
+
+                {% if messages %}
+                    {% for msg in messages %}
+                    <div class="alert alert-{{ msg.tags }} alert-dismissible fade show" role="alert"
+                         style="background:#1a1a1a; border:1px solid #333; color:#ddd;">
+                        {{ msg }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger" style="font-size:0.8rem; margin-top:4px;">
+                                {{ field.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    {% if form.non_field_errors %}
+                    <div class="mb-3" style="color:#ff6b6b; font-size:0.85rem;">
+                        {{ form.non_field_errors|join:", " }}
+                    </div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-acento w-100 mt-2">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Ingresar
+                    </button>
+                </form>
+
+                <div class="text-center mt-4" style="color:#555; font-size:0.9rem;">
+                    ¿No tenés cuenta?
+                    <a href="{% url 'registro' %}" style="color:#e8622a;">Registrate aquí</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

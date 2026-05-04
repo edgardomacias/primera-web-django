@@ -1,0 +1,59 @@
+{% extends "plataforma/base.html" %}
+
+{% block title %}Editar Perfil - ResenasYa{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="mb-3">
+                <a href="{% url 'perfil' %}" style="color:#e8622a; text-decoration:none; font-size:0.9rem;">
+                    <i class="bi bi-arrow-left me-1"></i>Volver al Perfil
+                </a>
+            </div>
+            <div class="card p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-gear" style="font-size:2.5rem; color:#e8622a;"></i>
+                    <h3 class="card-title mt-2">Editar Perfil</h3>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Apellido</label>
+                        {{ form.last_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger" style="font-size:0.8rem;">{{ form.email.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.avatar.label }}</label>
+                        {{ form.avatar }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.fecha_nacimiento.label }}</label>
+                        {{ form.fecha_nacimiento }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.biografia.label }}</label>
+                        {{ form.biografia }}
+                    </div>
+
+                    <button type="submit" class="btn btn-acento w-100 mt-2">
+                        <i class="bi bi-floppy me-2"></i>Guardar Cambios
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

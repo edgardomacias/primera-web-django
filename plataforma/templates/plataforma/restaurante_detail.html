@@ -5,16 +5,31 @@
 {% block content %}
 <div class="container py-5">
     <!-- HEADER -->
-    <div class="mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
         <a href="{% url 'restaurantes_list' %}" style="color:#e8622a; text-decoration:none; font-size:0.9rem;">
             <i class="bi bi-arrow-left me-1"></i>Volver a Restaurantes
         </a>
+        {% if user.is_authenticated %}
+        <div class="d-flex gap-2">
+            <a href="{% url 'restaurante_editar' restaurante.pk %}" class="btn btn-outline-acento btn-sm">
+                <i class="bi bi-pencil me-1"></i>Editar
+            </a>
+            <a href="{% url 'restaurante_borrar' restaurante.pk %}" class="btn btn-sm"
+               style="border:1px solid #444; color:#888;">
+                <i class="bi bi-trash me-1"></i>Eliminar
+            </a>
+        </div>
+        {% endif %}
     </div>
 
     <div class="row g-4 mb-5">
         <!-- INFO RESTAURANTE -->
         <div class="col-lg-8">
             <div class="card p-4">
+                {% if restaurante.imagen %}
+                <img src="{{ restaurante.imagen.url }}" alt="{{ restaurante.nombre }}"
+                     style="width:100%; height:220px; object-fit:cover; border-radius:10px; margin-bottom:1.5rem;">
+                {% endif %}
                 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
                     <div>
                         <span class="badge-cocina mb-2 d-inline-block">{{ restaurante.tipo_cocina }}</span>
@@ -23,13 +38,25 @@
                             <i class="bi bi-geo-alt-fill me-1" style="color:#e8622a;"></i>
                             {{ restaurante.ciudad }} &mdash; {{ restaurante.direccion }}
                         </p>
-                        <p style="color:#666;">
+                        <p style="color:#666;" class="mb-1">
                             <i class="bi bi-telephone me-1"></i>{{ restaurante.telefono }}
                         </p>
+                        {% if restaurante.fecha_apertura %}
+                        <p style="color:#666;" class="mb-0">
+                            <i class="bi bi-calendar-event me-1"></i>
+                            Abierto desde: {{ restaurante.fecha_apertura|date:"d/m/Y" }}
+                        </p>
+                        {% endif %}
                     </div>
-                    <a href="{% url 'resena_crear' %}" class="btn btn-acento">
-                        <i class="bi bi-plus-circle me-1"></i>Agregar Resena
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'resena_crear' %}?restaurante={{ restaurante.pk }}" class="btn btn-acento">
+                        <i class="bi bi-plus-circle me-1"></i>Agregar Reseña
                     </a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-acento btn-sm">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>Ingresá para reseñar
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -46,15 +73,20 @@
                     {% if promedio >= 5 %}&#9733;{% else %}&#9734;{% endif %}
                 </div>
                 <p style="color:#666; margin-top:0.5rem; font-size:0.9rem;">
-                    Basado en {{ resenas.count }} resena(s)
+                    Basado en {{ resenas.count }} reseña(s)
                 </p>
+                {% if restaurante.codigo_registro %}
+                <p style="color:#333; font-size:0.75rem; margin-top:0.5rem;">
+                    Reg. #{{ restaurante.codigo_registro }}
+                </p>
+                {% endif %}
             </div>
         </div>
     </div>
 
     <!-- RESENAS -->
     <div class="section-header">
-        <h3 class="page-title mb-0">Resenas ({{ resenas.count }})</h3>
+        <h3 class="page-title mb-0">Reseñas ({{ resenas.count }})</h3>
     </div>
 
     {% if resenas %}
@@ -91,10 +123,16 @@
     {% else %}
     <div class="alert-dark-custom p-4 text-center">
         <i class="bi bi-chat-left" style="font-size:2rem; color:#333; display:block; margin-bottom:0.5rem;"></i>
-        Aun no hay resenas para este restaurante.
-        <a href="{% url 'resena_crear' %}" class="d-block mt-2" style="color:#e8622a;">
-            Se el primero en escribir una
+        Aún no hay reseñas para este restaurante.
+        {% if user.is_authenticated %}
+        <a href="{% url 'resena_crear' %}?restaurante={{ restaurante.pk }}" class="d-block mt-2" style="color:#e8622a;">
+            Sé el primero en escribir una
         </a>
+        {% else %}
+        <a href="{% url 'login' %}" class="d-block mt-2" style="color:#e8622a;">
+            Iniciá sesión para escribir la primera reseña
+        </a>
+        {% endif %}
     </div>
     {% endif %}
 </div>
