@@ -5,13 +5,21 @@ from .models import Restaurante, Resena, Usuario
 class RestauranteForm(forms.ModelForm):
     class Meta:
         model = Restaurante
-        fields = ["nombre", "direccion", "tipo_cocina", "telefono", "ciudad"]
+        fields = ["nombre", "direccion", "tipo_cocina", "telefono", "ciudad", "imagen", "fecha_apertura", "codigo_registro"]
         widgets = {
             "nombre": forms.TextInput(attrs={"class": "form-control", "placeholder": "Nombre del restaurante"}),
             "direccion": forms.TextInput(attrs={"class": "form-control", "placeholder": "Dirección completa"}),
             "tipo_cocina": forms.TextInput(attrs={"class": "form-control", "placeholder": "Ej: Italiana, Japonesa, Peruana"}),
-            "telefono": forms.TextInput(attrs={"class": "form-control", "placeholder": "+56 9 XXXX XXXX"}),
+            "telefono": forms.TextInput(attrs={"class": "form-control", "placeholder": "+54 9 XXXX XXXX"}),
             "ciudad": forms.TextInput(attrs={"class": "form-control", "placeholder": "Ciudad"}),
+            "imagen": forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "fecha_apertura": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
+            "codigo_registro": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Código único del establecimiento"}),
+        }
+        labels = {
+            "codigo_registro": "Código de Registro",
+            "fecha_apertura": "Fecha de Apertura",
+            "imagen": "Imagen del Restaurante",
         }
 
 

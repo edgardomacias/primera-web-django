@@ -1,0 +1,98 @@
+{% extends "plataforma/base.html" %}
+
+{% block title %}Mi Perfil - ResenasYa{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex flex-wrap justify-content-between align-items-center section-header gap-3 mb-4">
+                <h2 class="page-title mb-0">Mi Perfil</h2>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'perfil_editar' %}" class="btn btn-acento btn-sm">
+                        <i class="bi bi-pencil me-1"></i>Editar Perfil
+                    </a>
+                    <a href="{% url 'cambio_password' %}" class="btn btn-outline-acento btn-sm">
+                        <i class="bi bi-shield-lock me-1"></i>Cambiar Contraseña
+                    </a>
+                </div>
+            </div>
+
+            {% if messages %}
+                {% for msg in messages %}
+                <div class="alert alert-dismissible fade show mb-4" role="alert"
+                     style="background:#1a2a1a; border:1px solid #2a4a2a; color:#90ee90;">
+                    <i class="bi bi-check-circle me-2"></i>{{ msg }}
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card p-4 p-md-5">
+                <div class="row align-items-center g-4">
+                    <!-- Avatar -->
+                    <div class="col-md-3 text-center">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}"
+                                 class="rounded-circle"
+                                 style="width:120px; height:120px; object-fit:cover; border:3px solid #e8622a;"
+                                 alt="Avatar">
+                        {% else %}
+                            <div style="width:120px; height:120px; background:#1a1a1a; border-radius:50%;
+                                        border:3px solid #2a2a2a; display:flex; align-items:center;
+                                        justify-content:center; margin:0 auto;">
+                                <i class="bi bi-person-fill" style="font-size:3rem; color:#444;"></i>
+                            </div>
+                        {% endif %}
+                        <p class="mt-2 mb-0" style="color:#e8622a; font-weight:700;">{{ user.username }}</p>
+                    </div>
+
+                    <!-- Datos -->
+                    <div class="col-md-9">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <small class="form-label">Nombre</small>
+                                <p style="color:#fff; font-weight:600;">
+                                    {{ user.first_name|default:"—" }}
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <small class="form-label">Apellido</small>
+                                <p style="color:#fff; font-weight:600;">
+                                    {{ user.last_name|default:"—" }}
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <small class="form-label">Email</small>
+                                <p style="color:#fff;">
+                                    <i class="bi bi-envelope me-1" style="color:#e8622a;"></i>
+                                    {{ user.email|default:"—" }}
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <small class="form-label">Fecha de nacimiento</small>
+                                <p style="color:#fff;">
+                                    <i class="bi bi-calendar me-1" style="color:#e8622a;"></i>
+                                    {{ user.profile.fecha_nacimiento|default:"—" }}
+                                </p>
+                            </div>
+                            {% if user.profile.biografia %}
+                            <div class="col-12">
+                                <small class="form-label">Biografía</small>
+                                <p style="color:#ccc; line-height:1.7;">{{ user.profile.biografia }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fecha de registro -->
+            <div class="text-center mt-3" style="color:#444; font-size:0.8rem;">
+                <i class="bi bi-clock me-1"></i>
+                Miembro desde {{ user.date_joined|date:"d/m/Y" }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
